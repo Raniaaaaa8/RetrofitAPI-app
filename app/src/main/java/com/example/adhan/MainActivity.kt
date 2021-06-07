@@ -33,11 +33,8 @@ class MainActivity : AppCompatActivity() {
               JsonPlaceHolderApi::class.java
           )
           val call = jsonPlaceHolderApi.posts
-          call!!.enqueue(object : Callback<kotlin.collections.List<Post>> {
-              override fun onResponse(
-                  call: Call<kotlin.collections.List<Post>>,
-                  response: Response<kotlin.collections.List<Post>>
-              ) {
+          call!!.enqueue(object : Callback<List<Post?>?> {
+              override fun onResponse(call: Call<List<Post?>?>, response: Response<List<Post?>?>) {
                   if (!response.isSuccessful) {
                       text_view_result.setText("Code: " + response.code())
                       return
@@ -46,7 +43,7 @@ class MainActivity : AppCompatActivity() {
                   for (post in posts) {
                       var content = ""
                       content += """
-                      ID: ${post.id}
+                      ID: ${post!!.id}
  
                       """.trimIndent()
                       content += """
@@ -66,15 +63,11 @@ class MainActivity : AppCompatActivity() {
                   }
               }
 
-              override fun onFailure(call: Call<kotlin.collections.List<Post>>, t: Throwable) {
+              override fun onFailure(call: Call<kotlin.collections.List<Post?>?>, t: Throwable) {
                   text_view_result.setText(t.message)
               }
           })
       }
-}
-
-private fun <T> Call<T>.enqueue(callback: Callback<List<Post>>) {
-
 }
 
 
